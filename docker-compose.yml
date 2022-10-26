@@ -1,0 +1,131 @@
+version: "4.0"
+services:
+  mysql:
+    image: mysql:5.7
+    hostname: "mysql"
+    restart: always
+    volumes:
+      - mysql:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - default
+
+  mariadb:
+    image: mariadb:10.4.17
+    hostname: "mariadb"
+    restart: always
+    volumes:
+      - mariadb:/var/lib/mysql
+    ports:
+      - "3326:3306"
+    environment: 
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - default
+
+  postgres:
+    image: postgres
+    hostname: "postgres"
+    restart: always
+    volumes:
+      - postgres:/var/lib/postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    networks:
+      - default
+
+  mongodb:
+    image: mongo:4.4.4
+    hostname: "mongodb"
+    restart: always
+    volumes:
+      - mongodb:/data/mongodb
+    ports:
+      - "27027:27017"
+    environment:
+      - MONGODB_ROOT_PASSWORD=root
+    networks:
+      - default
+  
+  es:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.18
+    hostname: "docker-local-es"
+    restart: always
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - ES_JAVA_OPTS=-Xms750m -Xmx750m
+    networks:
+      - default
+
+  memcached:
+    image: memcached:latest
+    hostname: "memcached"
+    restart: always
+    volumes: 
+      - memcached:/data/memcached
+    ports:
+      - "11221:11211"
+    networks:
+      - default
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    hostname: "mailhog"
+    restart: always
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - default
+
+  rabbitmq:
+    image: bitnami/rabbitmq:3.10.5
+    hostname: "rabbitmq"
+    restart: always
+    volumes:
+      - rabbitmq:/data/rabbitmq
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=root
+      - RABBITMQ_DEFAULT_PASS=root
+    networks:
+      - default
+
+  redis:
+    image: bitnami/redis:6.2
+    hostname: "redis"
+    restart: always
+    volumes:
+      - redis:/data/redis
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=root
+      - REDIS_USER=root
+    networks:
+      - default
+
+volumes:
+  data:
+  mysql:
+  mariadb:
+  mongodb:
+  postgres:
+  memcached:
+  rabbitmq:
+  redis:
+
+networks:
+  default:
+    driver: bridge
+
